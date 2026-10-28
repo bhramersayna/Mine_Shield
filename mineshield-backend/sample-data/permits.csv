@@ -1,0 +1,12 @@
+permit_number,vehicle_registration,mineral_type,authorized_quantity,origin,destination,issue_timestamp,valid_until,source_system
+PER-2026-101,UP32AB1001,Riverbed Sand,25.00,Sone Quarry Block A,Highway Terminal East,2026-10-20 08:00:00,2026-10-20 18:00:00,MINING_PORTAL_EAST
+PER-2026-102,UP32AB1002,Stone Aggregate,30.00,Betwa River Quarry,Crusher Unit 4,2026-10-20 08:30:00,2026-10-20 18:30:00,MINING_PORTAL_EAST
+PER-2026-103,UP32AB1003,Riverbed Sand,20.00,Sone Quarry Block A,Riverbed Yard North,2026-10-20 09:00:00,2026-10-20 19:00:00,MINING_PORTAL_EAST
+PER-2026-104,UP32AB1004,Quartzite,15.00,Mirzapur Ridge Block 2,Industrial Siding 3,2026-10-20 09:15:00,2026-10-20 19:15:00,MINING_PORTAL_EAST
+PER-2026-105,UP32AB1005,Riverbed Sand,22.00,Sone Quarry Block B,Central Mixing Plant,2026-10-20 09:45:00,2026-10-20 19:45:00,MINING_PORTAL_EAST
+PER-2026-106,UP32AB1006,Stone Aggregate,28.00,Betwa River Quarry,Crusher Unit 2,2026-10-20 10:00:00,2026-10-20 20:00:00,MINING_PORTAL_EAST
+PER-2026-107,UP32AB1007,Riverbed Sand,24.00,Sone Quarry Block A,Highway Terminal East,2026-10-20 10:30:00,2026-10-20 20:30:00,MINING_PORTAL_EAST
+PER-2026-108,UP32AB1008,Quartzite,18.00,Mirzapur Ridge Block 1,Industrial Siding 1,2026-10-20 11:00:00,2026-10-20 21:00:00,MINING_PORTAL_EAST
+PER-2026-108B,UP32AB1008,Quartzite,18.00,Mirzapur Ridge Block 1,Industrial Siding 2,2026-10-20 11:15:00,2026-10-20 21:15:00,MINING_PORTAL_EAST
+PER-2026-109,UP32AB1009,Riverbed Sand,20.00,Sone Quarry Block A,Highway Terminal East,2026-10-20 11:30:00,2026-10-20 21:30:00,MINING_PORTAL_EAST
+PER-2026-110,UP32AB1010,Stone Aggregate,16.00,Betwa River Quarry,Crusher Unit 4,2026-10-20 12:00:00,2026-10-20 22:00:00,MINING_PORTAL_EAST

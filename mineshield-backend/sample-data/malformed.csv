@@ -1,0 +1,4 @@
+permit_number,vehicle_registration,mineral_type,authorized_quantity,origin,destination
+PER-ERR-001,UP32AB9991,Riverbed Sand,INVALID_QTY,Sone Quarry,East Yard
+PER-ERR-002,,Stone Aggregate,20.00,Betwa River,Crusher Unit
+PER-ERR-003,UP32AB9993,Quartzite,-15.00,Mirzapur,Siding
