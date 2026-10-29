@@ -3,6 +3,10 @@
 
 MineShield is an enterprise reconciliation and audit-support platform designed to help compliance teams ingest, normalize, reconcile, investigate, and audit mineral transportation records across multi-source operational systems (state mining permit registries, highway surveillance/checkpoint RFID gates, and industrial weighbridge scales).
 
+> [!NOTE]
+> **Backend Architecture & Core Engine Lead**: Bhramer Sayna ([@bhramersayna](https://github.com/bhramersayna))  
+> Responsible for the 15-table 3NF relational schema, dual-provider database abstraction (SQLite / Azure SQL), CSV data ingestion and normalization pipeline, and the core 8-rule deterministic reconciliation engine.
+
 ---
 
 ## 1. Problem Statement & Scope
