@@ -1,0 +1,15 @@
+
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "mineshield-backend": {
+      "root": "mineshield-backend",
+      "framework": "express"
+    },
+    "mineshield-frontend": {
+      "root": "mineshield-frontend",
+      "framework": "vite"
+    }
+  },
+  "rewrites": []
+}
