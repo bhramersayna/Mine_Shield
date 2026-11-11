@@ -90,7 +90,8 @@ app.get("/api/dashboard/summary", async (req, res) => {
 app.use((err, req, res, next) => {
   console.error("Internal Server Error:", err);
   res.status(500).json({
-    error: config.env === "development" ? err.message : "An internal server error occurred."
+    error: err.message || "An internal server error occurred.",
+    stack: config.env === "development" ? err.stack : undefined
   });
 });
 
