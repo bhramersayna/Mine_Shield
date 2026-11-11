@@ -1,20 +1,40 @@
-const sqlite3 = require("sqlite3").verbose();
+let sqlite3 = null;
+let nativeSqlite = null;
+
+try {
+  sqlite3 = require("sqlite3").verbose();
+} catch (e) {
+  // If native sqlite3 fails (e.g. Linux GLIBC mismatch on Vercel), fallback to Node's built-in sqlite
+  try {
+    nativeSqlite = require("node:sqlite");
+  } catch (err) {
+    console.error("Neither sqlite3 nor node:sqlite could be loaded:", err);
+  }
+}
+
 const fs = require("fs");
 const path = require("path");
 const config = require("../config");
 const azureSqlProvider = require("./azureSqlProvider");
 
 let dbInstance = null;
+let nativeDbInstance = null;
 
 // Connect to SQLite Database
 function getDb() {
   if (config.databaseProvider === "azuresql") {
     throw new Error("getDb() direct SQLite instance requested but DATABASE_PROVIDER is 'azuresql'. Use run(), get(), all() abstraction.");
   }
-  if (!dbInstance) {
-    dbInstance = new sqlite3.Database(config.sqlitePath);
+  if (!dbInstance && !nativeDbInstance) {
+    if (sqlite3) {
+      dbInstance = new sqlite3.Database(config.sqlitePath);
+    } else if (nativeSqlite) {
+      nativeDbInstance = new nativeSqlite.DatabaseSync(config.sqlitePath);
+    } else {
+      throw new Error("No SQLite driver available in runtime environment.");
+    }
   }
-  return dbInstance;
+  return dbInstance || nativeDbInstance;
 }
 
 // Execute SQL query that doesn't return data or returns insert id
@@ -23,8 +43,21 @@ function run(sql, params = []) {
     return azureSqlProvider.run(sql, params);
   }
 
+  const db = getDb();
+  if (nativeDbInstance) {
+    try {
+      const stmt = nativeDbInstance.prepare(sql);
+      const res = stmt.run(...params);
+      return Promise.resolve({
+        lastID: Number(res.lastInsertRowid),
+        changes: res.changes
+      });
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
+
   return new Promise((resolve, reject) => {
-    const db = getDb();
     db.run(sql, params, function (err) {
       if (err) reject(err);
       else resolve(this);
@@ -38,8 +71,18 @@ function get(sql, params = []) {
     return azureSqlProvider.get(sql, params);
   }
 
+  const db = getDb();
+  if (nativeDbInstance) {
+    try {
+      const stmt = nativeDbInstance.prepare(sql);
+      const row = stmt.get(...params);
+      return Promise.resolve(row || null);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
+
   return new Promise((resolve, reject) => {
-    const db = getDb();
     db.get(sql, params, (err, row) => {
       if (err) reject(err);
       else resolve(row);
@@ -53,8 +96,18 @@ function all(sql, params = []) {
     return azureSqlProvider.all(sql, params);
   }
 
+  const db = getDb();
+  if (nativeDbInstance) {
+    try {
+      const stmt = nativeDbInstance.prepare(sql);
+      const rows = stmt.all(...params);
+      return Promise.resolve(rows || []);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
+
   return new Promise((resolve, reject) => {
-    const db = getDb();
     db.all(sql, params, (err, rows) => {
       if (err) reject(err);
       else resolve(rows || []);
@@ -96,8 +149,13 @@ async function initSchema() {
   const schemaPath = path.join(__dirname, "schema.sql");
   const schemaSql = fs.readFileSync(schemaPath, "utf8");
 
+  const db = getDb();
+  if (nativeDbInstance) {
+    nativeDbInstance.exec(schemaSql);
+    return Promise.resolve();
+  }
+
   return new Promise((resolve, reject) => {
-    const db = getDb();
     db.exec(schemaSql, (err) => {
       if (err) reject(err);
       else resolve();
