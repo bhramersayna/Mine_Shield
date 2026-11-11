@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm run build --prefix mineshield-frontend",
-    "install:backend": "npm install --prefix mineshield-backend",
-    "install:frontend": "npm install --prefix mineshield-frontend"
+    "build": "npm run build --prefix mineshield-frontend"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.34.0",
@@ -17,6 +15,10 @@
     "jsonwebtoken": "^9.0.3",
     "mssql": "^12.7.11",
     "multer": "^2.5.0",
-    "sqlite3": "^6.0.1"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sqlite3": "^6.0.1",
+    "vite": "^8.3.4",
+    "@vitejs/plugin-react": "^6.1.2"
   }
 }

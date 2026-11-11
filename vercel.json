@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "installCommand": "npm install && npm install --prefix mineshield-frontend",
   "buildCommand": "npm run build --prefix mineshield-frontend",
   "outputDirectory": "mineshield-frontend/dist",
   "rewrites": [
@@ -13,7 +14,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/$1"
     }
   ]
 }
