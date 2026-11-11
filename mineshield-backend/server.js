@@ -95,12 +95,95 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Auto-seed initial demonstration data if database contains no records
+async function seedSampleOperationalData() {
+  try {
+    const { get, all, run } = require("./db/index");
+    const existingPermits = await get("SELECT COUNT(*) as count FROM PermitRecords");
+    if (existingPermits && existingPermits.count > 0) {
+      return;
+    }
+
+    const adminUser = await get("SELECT id FROM Users WHERE username = 'admin'");
+    if (!adminUser) return;
+
+    const sampleData = require("./sample-data/sampleDataStrings");
+    const importService = require("./services/importService");
+    const reconciliationEngine = require("./services/reconciliationEngine");
+
+    const permitBuf = Buffer.from(sampleData.permitsCsv, "utf8");
+    const cpBuf = Buffer.from(sampleData.checkpointsCsv, "utf8");
+    const wbBuf = Buffer.from(sampleData.weighbridgesCsv, "utf8");
+
+    console.log("Auto-seeding initial operational sample data...");
+    await importService.executeImport({
+      fileBuffer: permitBuf,
+      originalFilename: "permits.csv",
+      sourceType: "PERMIT",
+      userId: adminUser.id
+    });
+
+    await importService.executeImport({
+      fileBuffer: cpBuf,
+      originalFilename: "checkpoints.csv",
+      sourceType: "CHECKPOINT",
+      userId: adminUser.id
+    });
+
+    await importService.executeImport({
+      fileBuffer: wbBuf,
+      originalFilename: "weighbridges.csv",
+      sourceType: "WEIGHBRIDGE",
+      userId: adminUser.id
+    });
+
+    console.log("Running initial reconciliation on sample data...");
+    await reconciliationEngine.runReconciliation({
+      userId: adminUser.id,
+      quantityTolerancePct: 5.0
+    });
+
+    // Seed initial demonstration compliance case
+    const sampleDiscrepancies = await all("SELECT id, discrepancy_code, title FROM Discrepancies LIMIT 2");
+    if (sampleDiscrepancies && sampleDiscrepancies.length > 0) {
+      const caseResult = await run(
+        `INSERT INTO ComplianceCases (case_code, title, description, priority, status, assigned_to, created_by)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          "CASE-2026-001",
+          "Systematic Route Bypass & Tonnage Discrepancies (Hospet Corridor)",
+          "Investigating recurrent discrepancies in the mineral transit corridor involving weight differences exceeding permissible tolerance and RFID tollgate bypasses.",
+          "HIGH",
+          "OPEN",
+          adminUser.id,
+          adminUser.id
+        ]
+      );
+      const caseId = caseResult.lastID;
+      for (const disc of sampleDiscrepancies) {
+        await run(
+          "INSERT OR IGNORE INTO CaseDiscrepancies (case_id, discrepancy_id) VALUES (?, ?)",
+          [caseId, disc.id]
+        );
+      }
+    }
+
+    console.log("Sample demonstration data auto-seeded successfully.");
+  } catch (err) {
+    console.error("Warning: Could not auto-seed operational sample data:", err.message);
+  }
+}
+
 // Initialize Database & Start Server
 async function startServer() {
   try {
     await initSchema();
     await seedDefaultData();
     console.log("Database schema initialized and seed data verified.");
+
+    if (process.env.NODE_ENV !== "test") {
+      await seedSampleOperationalData();
+    }
 
     if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
       app.listen(config.port, () => {
