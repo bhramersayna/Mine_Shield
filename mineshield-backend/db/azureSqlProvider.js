@@ -1,4 +1,11 @@
-const sql = require("mssql");
+let sql = null;
+function getSqlDriver() {
+  if (!sql) {
+    sql = require("mssql");
+  }
+  return sql;
+}
+
 const fs = require("fs");
 const path = require("path");
 const config = require("../config");
@@ -48,7 +55,8 @@ async function getPool() {
     }
   };
 
-  poolInstance = await new sql.ConnectionPool(poolConfig).connect();
+  const mssql = getSqlDriver();
+  poolInstance = await new mssql.ConnectionPool(poolConfig).connect();
   return poolInstance;
 }
 
@@ -126,7 +134,8 @@ async function all(sqlText, params = []) {
 // Transaction execution wrapper
 async function transaction(callback) {
   const pool = await getPool();
-  const txn = new sql.Transaction(pool);
+  const mssql = getSqlDriver();
+  const txn = new mssql.Transaction(pool);
   await txn.begin();
 
   try {
