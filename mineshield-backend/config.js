@@ -9,7 +9,11 @@ module.exports = {
 
   // Database Configuration: 'sqlite' (local development) or 'azuresql' (cloud)
   databaseProvider: process.env.DATABASE_PROVIDER || "sqlite",
-  sqlitePath: process.env.SQLITE_PATH || path.join(__dirname, "mineshield.db"),
+  sqlitePath:
+    process.env.SQLITE_PATH ||
+    (process.env.VERCEL
+      ? path.join("/tmp", "mineshield.db")
+      : path.join(__dirname, "mineshield.db")),
 
   // Azure SQL Database Configuration (Required when DATABASE_PROVIDER=azuresql)
   azureSql: {
@@ -25,7 +29,11 @@ module.exports = {
 
   // Storage Configuration: 'local' (local disk storage) or 'azureblob' (cloud)
   storageProvider: process.env.STORAGE_PROVIDER || "local",
-  localStorageDir: process.env.LOCAL_STORAGE_DIR || path.join(__dirname, "uploads"),
+  localStorageDir:
+    process.env.LOCAL_STORAGE_DIR ||
+    (process.env.VERCEL
+      ? path.join("/tmp", "uploads")
+      : path.join(__dirname, "uploads")),
 
   // Azure Blob Storage Configuration (Required when STORAGE_PROVIDER=azureblob)
   azureBlob: {

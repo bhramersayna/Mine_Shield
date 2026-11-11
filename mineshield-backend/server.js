@@ -101,7 +101,7 @@ async function startServer() {
     await seedDefaultData();
     console.log("Database schema initialized and seed data verified.");
 
-    if (process.env.NODE_ENV !== "test") {
+    if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
       app.listen(config.port, () => {
         console.log(`MineShield backend running at http://localhost:${config.port}`);
       });

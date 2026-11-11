@@ -1,6 +1,39 @@
 ﻿node_modules/
+mineshield-backend/node_modules/
+mineshield-frontend/node_modules/
+
+# Production builds
+dist/
+mineshield-frontend/dist/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+mineshield.db
+mineshield-backend/mineshield.db
+
+# Uploaded evidence runtime files
+uploads/*
+!uploads/.gitkeep
+mineshield-backend/uploads/*
+!mineshield-backend/uploads/.gitkeep
+
+# Environment files
 .env
 .env.*
 !.env.example
-dist/
-coverage/
+mineshield-backend/.env
+mineshield-backend/.env.*
+!mineshield-backend/.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

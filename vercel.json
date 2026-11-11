@@ -1,15 +1,19 @@
-
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "services": {
-    "mineshield-backend": {
-      "root": "mineshield-backend",
-      "framework": "express"
+  "version": 2,
+  "buildCommand": "npm run build --prefix mineshield-frontend",
+  "outputDirectory": "mineshield-frontend/dist",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
     },
-    "mineshield-frontend": {
-      "root": "mineshield-frontend",
-      "framework": "vite"
+    {
+      "source": "/uploads/(.*)",
+      "destination": "/api"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  },
-  "rewrites": []
+  ]
 }
