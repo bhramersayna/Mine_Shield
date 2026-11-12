@@ -1,4 +1,4 @@
-# MineShield 🛡️
+# MineShield 
 
 **Mineral Transportation Record Reconciliation & Compliance Audit Platform**
 
@@ -10,7 +10,7 @@
 
 ---
 
-## 📌 Executive Summary & Problem Statement
+##  Executive Summary & Problem Statement
 
 Illegal mineral transport, overload evasion, transit discrepancies, and permit reuse cause billions in state revenue loss and severe regulatory compliance deficits. Traditional mining departments rely on fragmented, siloed record-keeping across:
 1. **Mining Permit Authorities** (authorized extraction quantity, validity dates, assigned route, vehicle numbers).
@@ -21,7 +21,7 @@ Illegal mineral transport, overload evasion, transit discrepancies, and permit r
 
 ---
 
-## 👥 Project Team & Role Division
+##  Project Team & Role Division
 
 MineShield is developed as a collaborative two-member engineering project with strict division of architectural and operational responsibilities:
 
@@ -34,7 +34,7 @@ For comprehensive chapter ownership breakdown, academic report division, and col
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
 MineShield follows a modular, decoupled 3-tier architecture designed for rapid local demonstration with seamless cloud enterprise scalability:
 
